@@ -5,7 +5,6 @@
  */
 var express = require('express'),
     fs = require('fs'),
-    passport = require('passport'),
     logger = require('mean-logger');
 
 /**
@@ -18,11 +17,7 @@ var express = require('express'),
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Initializing system variables 
-var config = require('./config/config'),
-    mongoose = require('mongoose');
-
-// Bootstrap db connection
-var db = mongoose.connect(config.db);
+var config = require('./config/config');
 
 // Bootstrap models
 var models_path = __dirname + '/app/models';
@@ -41,13 +36,10 @@ var walk = function(path) {
 };
 walk(models_path);
 
-// Bootstrap passport config
-require('./config/passport')(passport);
-
 var app = express();
 
 // Express settings
-require('./config/express')(app, passport, db);
+require('./config/express')(app);
 
 // Bootstrap routes
 var routes_path = __dirname + '/app/routes';
@@ -57,14 +49,10 @@ var walk = function(path) {
         var stat = fs.statSync(newPath);
         if (stat.isFile()) {
             if (/(.*)\.(js$|coffee$)/.test(file)) {
-                require(newPath)(app, passport);
+                require(newPath)(app);
             }
-        // We skip the app/routes/middlewares directory as it is meant to be
-        // used and shared by routes as further middlewares and is not a 
-        // route by itself
-        } else if (stat.isDirectory() && file !== 'middlewares') {
-            walk(newPath);
-        }
+        
+        } 
     });
 };
 walk(routes_path);
@@ -72,11 +60,9 @@ walk(routes_path);
 
 // Start the app by listening on <port>
 var port = process.env.PORT || config.port;
-app.listen(port);
-console.log('Express app started on port ' + port);
+var server = app.listen(port);
 
-// Initializing logger
-logger.init(app, passport, mongoose);
+console.log('Express app started on port ' + port);
 
 // Expose app
 exports = module.exports = app;

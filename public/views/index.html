@@ -1,3 +1,92 @@
-<section data-ng-controller="IndexController">
-	<h1>This is the home view</h1>
-</section>
+
+    <div data-ng-controller="IndexController">
+      <div class="container">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+
+            </div>
+            <div class="col-sm-9 col-md-9 sidebar">
+              <hr/>
+              <h4>Social search</h4>
+              <form name="searchForm" class="form-inline" role="form">
+                <div class="form-group">
+                  <label class="sr-only" for="exampleInputEmail2">Buscar</label>
+                  <input type="text" ng-model="search.text" required class="form-control input-sm " placeholder="escribre tu búsqueda"/>
+                </div>
+                <a class="btn btn-primary btn-sm"  
+                ng-disabled="!searchForm.$valid"
+                ng-click="search()">Buscar</a>
+              </form>  
+
+
+              <div class="progress progress-striped active" ng-class="{ 'hidden': ! search.running }">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                  searching...
+                </div>
+              </div>
+
+              <br/>
+              Search Text: <span class="badge badge-info">{{search.text}}</span>
+              <br/>
+              <tabset>
+                <tab heading="REST Api">
+                  <br/>
+                  <div ng-repeat="tweet in search.tweets.statuses" >
+                    <div class="media">
+                      <a class="pull-left" href="#">
+                        <img src="{{tweet.user.profile_image_url}}" class="img-circle">
+                      </a>
+                      <div class="media-body">
+                        <h4 class="media-heading">{{tweet.user.screen_name}}</h4>
+                        <blockquote class="blockquote-reverse">
+                          <p >
+                            {{tweet.text}}              
+                          </p>
+                        </blockquote>
+                      </div>
+                    </div> 
+                  </div>  
+                </tab>
+                <tab heading="Stream">
+                   
+                  <div ng-repeat="tweet in search.tweetstream">
+                    <div class="media">
+                      <a class="pull-left" href="#">
+                        <img src="{{tweet.user.profile_image_url}}" class="img-circle">
+                      </a>
+                      <div class="media-body">
+                        <h4 class="media-heading">{{tweet.user.screen_name}}</h4>
+                        <blockquote class="blockquote-reverse">
+                          <p>
+                            {{tweet.text}}          
+                          </p>
+                        </blockquote>
+                      </div>
+                    </div> 
+                  </div>  
+
+              
+                  
+                 
+                </tab>
+
+            </tabset>
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>  
+
+
+
+      <hello/>
+
+    </div>
+  </div> 
