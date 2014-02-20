@@ -44,6 +44,19 @@ $ npm install -g bower
 		  access_token_secret: 'access_token_secret'
 		});
 
+  FIX ntwitter
+
+  	$vi node_nodules/ntwitter/lib/keys.js
+
+  		search_base: 'http://search.twitter.com', // replace by :
+
+  		search_base: 'https://api.twitter.com/1.1/search',
+
+  	$vi node_modules/ntwitter/lib/twitter.js 
+  		// line 166
+  		var url = this.options.search_base + '/search.json'; // replace by
+
+		var url = this.options.search_base + '/tweets.json';
 
   We recommend using [Grunt](https://github.com/gruntjs/grunt-cli) to start the server:
 
@@ -52,3 +65,7 @@ $ npm install -g bower
   Then open a browser and go to:
 
     http://localhost:3000
+
+
+
+
